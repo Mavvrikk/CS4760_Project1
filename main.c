@@ -11,7 +11,7 @@ void helpFunction()
     printf("where -h displays this help function and terminates, proc is the number of processes you want to run, simu is the number of simultaneous");
     printf("processes that run and iter is the argument passed to the child processes.");
 }
-int forker(int totaltoLaunch, int simulLimit, int iterTotal, int totalLaunched)
+int forker(int totaltoLaunch, int simulLimit, char iterTotal, int totalLaunched)
 {
     pid_t pid;
     if(totalLaunched==simulLimit){
@@ -25,10 +25,11 @@ int forker(int totaltoLaunch, int simulLimit, int iterTotal, int totalLaunched)
         }
         else if (pid == 0)
         {
-            // char* args[]={"./worker,iterTotal,0"};
-            //execlp(args[0],args[0],args[1],args[2]);
+            char* args[]={"./worker",iterTotal,0};
+            execlp(args[0],args[0],args[1],args[2]);
             
-            /*CONTENTS OF WORKER FILE*/
+        /*CONTENTS OF WORKER FILE
+        
            for(int k=0; k<=iterTotal;k++){
                
             printf("WORKER PID:%d PARENT PID:%d ITERATION: %d before sleeping\n", getpid(), getppid(), k);
@@ -36,7 +37,8 @@ int forker(int totaltoLaunch, int simulLimit, int iterTotal, int totalLaunched)
             printf("WORKER PID:%d PARENT PID:%d ITERATION: %d after sleeping\n", getpid(), getppid(), k);
             exit(0);
            }
-            /*CONTENTS OF WORKER FILE*/
+           
+        */
         }
         else if(pid > 0)
         {
@@ -76,7 +78,7 @@ int main(int argc, char** argv)
    int totalLaunched=0; // int to count total children launched
    totaltoLaunch = atoi(x); // casting the argv to ints
    simulLimit = atoi(y);
-   iterTotal = atoi(z);
+   iterTotal = (z);
    int exCess = forker(totaltoLaunch,simulLimit,iterTotal,totalLaunched);
    int status;
    pid_t pid;
@@ -90,6 +92,7 @@ int main(int argc, char** argv)
     
     return(0);
 }
+
 
 
 
