@@ -35,6 +35,7 @@ int forker(int totaltoLaunch, int simulLimit, int iterTotal, int totalLaunched)
             sleep(1);
             printf("WORKER PID:%d PARENT PID:%d ITERATION: %d after sleeping\n", getpid(), getppid(), k);
             exit(0);
+           }
             /*CONTENTS OF WORKER FILE*/
         }
         else if(pid > 0)
@@ -82,7 +83,14 @@ int main(int argc, char** argv)
     pid = wait(&status);
     printf("I waited\n");
     if (exCess>0){printf("There were excess %d \n", exCess);}
+    for(exCess;exCess>0;exCess--){
+        forker(1,1,iterTotal,totalLaunched);
+        pid = wait(&status);
+    }
+    
+    return(0);
 }
+
 
 
 
