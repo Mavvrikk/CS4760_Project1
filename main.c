@@ -15,7 +15,7 @@ int forker(int firstArg, int secArg, int thirdArg, int counter)
 {
     pid_t pid;
     if((counter-firstArg)==secArg){
-        return (counter-firstArg);
+        return (firstArg);
     }
     else if(firstArg > 0)
     {
