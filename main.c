@@ -11,13 +11,13 @@ void helpFunction()
     printf("where -h displays this help function and terminates, proc is the number of processes you want to run, simu is the number of simultaneous");
     printf("processes that run and iter is the argument passed to the child processes.");
 }
-int forker(int firstArg, int secArg, int thirdArg, int counter)
+int forker(int totalLaunched, int simulLimit, int iterTotal, int totaltoLaunch)
 {
     pid_t pid;
-    if((counter-firstArg)==secArg){
-        return (firstArg);
+    if((totaltoLaunch-totalLaunched)==simulLimit){
+        return (totalLaunched);
     }
-    else if(firstArg > 0)
+    else if(totalLaunched > 0)
     {
         if ((pid = fork()) < 0)
         {
@@ -25,22 +25,23 @@ int forker(int firstArg, int secArg, int thirdArg, int counter)
         }
         else if (pid == 0)
         {
-            // char* args[]={"./worker,thirdArg,0"};
+            // char* args[]={"./worker,iterTotal,0"};
             //execlp(args[0],args[0],args[1],args[2]);
             
             /*CONTENTS OF WORKER FILE*/
-           for(int k=0; k<=thirdArg;k++){
+           for(int k=0; k<=iterTotal;k++){
                
             printf("WORKER PID:%d PARENT PID:%d ITERATION: %d before sleeping\n", getpid(), getppid(), k);
             sleep(1);
             printf("WORKER PID:%d PARENT PID:%d ITERATION: %d after sleeping\n", getpid(), getppid(), k);
+            exit();
             /*CONTENTS OF WORKER FILE*/
             
            }
         }
         else if(pid > 0)
         {
-            forker(firstArg - 1,secArg,thirdArg,counter);
+            forker(totalLaunched - 1,simulLimit,iterTotal,totaltoLaunch);
         }
     }
     else
@@ -70,17 +71,18 @@ int main(int argc, char** argv)
             break;
         }
     }
-   int firstArg=0; // ints to hold argv args
-   int secArg=0;
-   int thirdArg=0;
-   firstArg = atoi(x); // casting the argv to ints
-   secArg = atoi(y);
-   thirdArg = atoi(z);
-   int exCess = forker(firstArg,secArg,thirdArg,firstArg);
+   int totaltoLaunch=0; // ints to hold argv args
+   int simulLimit=0;
+   int iterTotal=0;
+   totaltoLaunch = atoi(x); // casting the argv to ints
+   simulLimit = atoi(y);
+   iterTotal = atoi(z);
+   int exCess = forker(totaltoLaunch,simulLimit,iterTotal,totaltoLaunch);
    int status;
    pid_t pid;
     pid = wait(&status);
     printf("I waited\n");
-    if (exCess>0){printf("There were excess \n");}
+    if (exCess>0){printf("There were excess %d \n", exCess);}
 }
+
 
